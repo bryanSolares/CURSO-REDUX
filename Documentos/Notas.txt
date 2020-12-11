@@ -20,3 +20,17 @@ ESTRUCTURA IMPORTANTES
 	type: Cuál es la acción a realizar
 	payload: Menor cantidad de información para realizar dicha tarea
 * REDUCER: Función que recibe dos argumentos y siempre debe retonar un estado, oldState: estado actual, action: Objeto plano que indica que hay que hacer
+* STATE: 
+	REGLAS
+	* es de solo lectura
+	* no se debe mutar
+	* hay funciones prohibidas
+* STORE:
+	RESPONSABILIDADES
+	* Contiene el estado actual de la aplicación
+	* Permite la lectura del estado via: getState()
+	* Permite crear un nuevo estado: dispath(ACTION)
+	* Permite notificar cambios de estado via subscribe()
+
+npm i -g ts-node typescript
+npm i redux
