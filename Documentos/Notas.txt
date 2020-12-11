@@ -1,0 +1,22 @@
+QUE ES REDUX?
+Simple patrón para manejo de información
+* Cuál es el estado de la aplicación
+* Como se encuentra determinada variable
+* Quién cambió esa variable
+* Como cambió la información/en que momento.
+
+IDEAS PRINCIPALES
+* Toda la data de la aplicación se encuentra en una estructura previamente definida.
+* Toda la información se encontrará almacenada en un único lugar llamado STORE
+* El STORE no se modifica de manera directa
+* Interacción de usuario y/o código, dispara acciones que describen qué sucedió
+* El valor actual de la información de la aplicación se llama STATE
+* Un nuevo estado es creado, en base a la combinación del viejo estado y una acción por una función llamada REDUCER
+
+
+ESTRUCTURA IMPORTANTES
+* ACTION: Única fuente de información que se envía por interacciones de usuario o programa
+	DOS PROPIEDADES
+	type: Cuál es la acción a realizar
+	payload: Menor cantidad de información para realizar dicha tarea
+* REDUCER: Función que recibe dos argumentos y siempre debe retonar un estado, oldState: estado actual, action: Objeto plano que indica que hay que hacer
