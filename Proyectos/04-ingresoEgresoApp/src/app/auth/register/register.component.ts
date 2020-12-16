@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as ui from '../../shared/ui.actions';
+import { Subscription } from 'rxjs';
+import { AppState } from '../../app.reducer';
 import { AnimationsService } from '../../services/animations.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -9,14 +13,17 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './register.component.html',
   styles: [],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   registroForm: FormGroup;
+  cargando = false;
+  uiSubscription: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private animationsService: AnimationsService,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -25,6 +32,10 @@ export class RegisterComponent implements OnInit {
       correo: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
+
+    this.uiSubscription = this.store
+      .select('ui')
+      .subscribe((ui) => (this.cargando = ui.isLoading));
   }
 
   crearUsuario(): void {
@@ -32,18 +43,21 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.animationsService.createLoading();
+    this.store.dispatch(ui.isLoading());
     const usuario = this.registroForm.value;
     this.authService
       .crearUsuario(usuario)
       .then((response) => {
-        console.log(response);
+        this.store.dispatch(ui.stopLoading());
         this.router.navigateByUrl('/');
-        this.animationsService.closeAnimation();
       })
       .catch((error) => {
-        console.error(error);
+        this.animationsService.closeAnimation();
         this.animationsService.createMessageError(error.message);
       });
+  }
+
+  ngOnDestroy() {
+    this.uiSubscription.unsubscribe();
   }
 }
