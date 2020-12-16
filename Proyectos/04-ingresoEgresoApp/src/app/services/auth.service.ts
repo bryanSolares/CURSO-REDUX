@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class AuthService {
   userSubscripton: Subscription;
+  private _user: Usuario;
 
   constructor(
     private authFire: AngularFireAuth,
@@ -28,12 +29,13 @@ export class AuthService {
           .doc(`${firebaseUser.uid}/usuario`)
           .valueChanges()
           .subscribe((userFirebase: any) => {
-            console.log(userFirebase);
             const user = Usuario.fromFirebase(userFirebase);
+            this._user = user;
             this.store.dispatch(authActions.setUser({ user }));
           });
       } else {
         if (this.userSubscripton) {
+          this._user = null;
           this.userSubscripton.unsubscribe();
         }
         this.store.dispatch(authActions.unSetUser());
@@ -60,6 +62,10 @@ export class AuthService {
     return this.authFire.authState.pipe(
       map((firebaseUser) => firebaseUser != null)
     );
+  }
+
+  get user() {
+    return { ...this._user };
   }
 
   salirSesion() {
