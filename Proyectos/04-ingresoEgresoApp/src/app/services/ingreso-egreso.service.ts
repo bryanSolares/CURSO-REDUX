@@ -15,8 +15,7 @@ export class IngresoEgresoService {
 
   crearIngresoEgreso(transaccion: IngresoEgreso) {
     const uid = this.authService.user.uid;
-    console.log(transaccion);
-    console.log(uid);
+    delete transaccion.uid;
     return this.firestore
       .doc(`${uid}/ingreso-egreso`)
       .collection('items')
@@ -24,17 +23,24 @@ export class IngresoEgresoService {
   }
 
   initIngresosEgresosListener(uid: string) {
-    this.firestore
+    return this.firestore
       .collection(`${uid}/ingreso-egreso/items`)
       .snapshotChanges()
       .pipe(
         map((snashot) =>
-          snashot.map((doc) => ({
-            id: doc.payload.doc.id,
-            ...(doc.payload.doc.data() as any),
-          }))
+          snashot.map((doc) => {
+            let data = doc.payload.doc.data() as IngresoEgreso;
+            data.uid = doc.payload.doc.id;
+            return { ...data };
+          })
         )
-      )
-      .subscribe(console.log);
+      );
+  }
+
+  borrarIngresoEgreso(uidItem: string) {
+    const uid = this.authService.user.uid;
+    return this.firestore
+      .doc(`${uid}/ingreso-egreso/items/${uidItem}`)
+      .delete();
   }
 }

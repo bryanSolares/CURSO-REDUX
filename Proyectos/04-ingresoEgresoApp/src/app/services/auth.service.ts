@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
 import { Store } from '@ngrx/store';
 import * as authActions from '../auth/auth.actions';
+import * as ieActions from '../ingreso-egreso/ingreso-egreso.actions';
 
 import { map } from 'rxjs/operators';
 import { Usuario } from '../models/usuario.model';
@@ -39,6 +40,7 @@ export class AuthService {
           this.userSubscripton.unsubscribe();
         }
         this.store.dispatch(authActions.unSetUser());
+        this.store.dispatch(ieActions.unSetItems());
       }
     });
   }
