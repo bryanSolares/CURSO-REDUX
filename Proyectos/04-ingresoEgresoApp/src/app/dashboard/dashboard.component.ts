@@ -31,7 +31,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.ingresosEgresosSubs = this.ieService
           .initIngresosEgresosListener(uid)
           .subscribe((ieFirebase) => {
-            console.log(ieFirebase);
             this.store.dispatch(
               ingresoEgresoActions.setItems({ items: ieFirebase })
             );
@@ -40,7 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ingresosEgresosSubs.unsubscribe();
-    this.userSubs.unsubscribe();
+    this.ingresosEgresosSubs?.unsubscribe();
+    this.userSubs?.unsubscribe();
   }
 }

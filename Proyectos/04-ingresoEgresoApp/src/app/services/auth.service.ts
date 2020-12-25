@@ -35,10 +35,8 @@ export class AuthService {
             this.store.dispatch(authActions.setUser({ user }));
           });
       } else {
-        if (this.userSubscripton) {
-          this._user = null;
-          this.userSubscripton.unsubscribe();
-        }
+        this._user = null;
+        this.userSubscripton?.unsubscribe();
         this.store.dispatch(authActions.unSetUser());
         this.store.dispatch(ieActions.unSetItems());
       }
