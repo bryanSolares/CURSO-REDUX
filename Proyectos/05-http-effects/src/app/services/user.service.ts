@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { User } from '../models/user.model';
 
@@ -17,5 +17,11 @@ export class UserService {
     return this.http
       .get(`${this.url}/users?page=1&delay=3`)
       .pipe(map<any, User[]>((response) => response['data']));
+  }
+
+  getUserById(id: string) {
+    return this.http
+      .get(`${this.url}/users/${id}`)
+      .pipe(map<any, User>((response) => response['data']));
   }
 }
